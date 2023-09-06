@@ -1,5 +1,7 @@
 > This is a working proof of concept for debugging python code executing inside of Touchdesigner
 
+![image-20230906021657083](./assets/image-20230906021657083.png)
+
 # Setup
 
 1. Install `debugpy` in Touchdesigner's python installation
