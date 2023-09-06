@@ -1,4 +1,4 @@
-> This is a working proof of concept for debugging python code executing inside of Touchdesigner
+> This is a working proof of concept for debugging python code executing inside of Touchdesigner. Tested in Touchdesigner 2022.31030.
 
 ![image-20230906021657083](./assets/image-20230906021657083.png)
 
