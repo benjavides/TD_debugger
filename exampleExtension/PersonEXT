@@ -1,0 +1,27 @@
+import debugpy
+import os
+
+class Person:
+	def __init__(self, myOp):
+		self.MyOp 				= myOp
+		self.Total_jumps 		= self.MyOp.par.Totaljumps
+		self.Total_jumps.val 	= 0 
+		
+	def Jump(self):
+		print(f"Script is running in: {os.getcwd()}")
+		print(f"__file__ attribute: {__file__}")
+		print("Jump!")
+		#debugpy.breakpoint()
+		self.Total_jumps.val = self.Total_jumps.eval() + 1
+		print(f"Total Jumps: {self.Total_jumps}")
+		
+	def Init_debugger(self):
+		print(f"Initializing debugger")
+		debugpy.listen(52492)
+		#print(f"Waiting for client...")
+		#debugpy.wait_for_client()
+		#print(f"Debugger connected!")
+
+	def Stop_debugger(self):
+		import pydevd
+		pydevd.stoptrace()
