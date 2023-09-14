@@ -35,16 +35,35 @@
 
       4. 🔄 Restart the console and try step 1.2 again.
 
-2. 🛣️ Touchdesigner paths <u>have to be replicated</u> in Windows file system for breakpoints to trigger:
+2. 🛣️ Touchdesigner paths have to be replicated in Windows file system for breakpoints set in the UI to trigger:
 
    1. 📂 Put the `TD_debugger` folder directly in your C drive.
    2. 📂 Put the `.vscode` inside `TD_debugger` directly in your C drive.
 
-3. 🖥️ Open Visual Studio Code in your C drive.
+   You can skip step 2 but you are going to have to set the breakpoints explicitly in the code with the command `debugpy.breakpoint()`. If you choose to use it like this, make sure that the pathMappings section in your launch.json is like this:
 
-4. 🎨 Open Touchdesigner. Go to `TD_debugger/exampleExtension` and in the custom parameters press `Init Debugger` to launch our own debugpy server. Wait for it to time out and throw an error.
+   ```
+   "pathMappings": [{
+                   "localRoot": "${workspaceFolder}",
+                   "remoteRoot": "c:"
+               }],
+   ```
 
-5. 🕹️ Connect vscode by going to the Debug tab and pressing the play button. If it asks, select the option `Attach using Process ID`. A dropdown should open, type `Touchdesigner` and select that process.
+   Where the letter of the `remoteRoot` has to match the drive letter of where you have the `Debugger.toe`.
+
+3. On a terminal run
+
+   ```
+   setx DEBUGPY_PROCESS_SPAWN_TIMEOUT 90
+   ```
+
+   to increase the time vscode is going to wait for the debugger to connect to the server. Thanks to [@AlphaMoonbaseBerlin](https://github.com/AlphaMoonbaseBerlin) for figuring this out!
+
+4. 🖥️ Open Visual Studio Code in your C drive.
+
+5. 🎨 Open the `Debugger.toe` in TouchDesigner.
+
+6. 🕹️ Connect vscode by going to the Debug tab and pressing the play button. A dropdown should open, look for `TouchDesigner.exe` and select that process. It takes around 35 seconds for the debugger to connect the first time.
 
 🔍 If the bottom bar turns orange it means that it was able to connect successfully. Add a breakpoint in line 15 in vscode and trigger a Jump in the exampleExtension using the jump pulse. Vs code should stop at that line and allow you to inspect the state of the program in the left column.
 
@@ -52,22 +71,12 @@
 
 # 🤔 How does this work?
 
-I think that vscode injects a dll in the running Touchdesigner process which launches a debugpy server to which the vscode debugger connects to.
-
-**❓ Why do we have to launch our own debugpy server then?**
-
-I have no idea but it doesn't connect if we don't launch it first.
-
-**❓ Isn't it obvious that it connects to the server we launch then?**
-
-Could be but I don't think so because I've tried stopping the server and as long as we have launched our own server once, vscode is able to connect from that point forward. Maybe the way I'm stopping the debugpy server is not right.
-
-**❓ Why not just use our own debugpy server?**
-
-If I explicitly tell the debugger to connect to my debugpy server (setting the ip and port in the `launch.json`) it doesn't connect, I don't know why. I was able to get this working at some point but couldn't replicate it. However, when it worked, I wasn't able to stop the session and reconnect; I had to close Touchdesigner and open it again.
+I think that vscode injects a dll in the running Touchdesigner process which launches a debugpy server to which the vscode debugger connects to. By default it times out, that is why we have to increase the timeout time
 
 
 
 # 📝 To do
 
--  🚀 Figure out how to use the `pathMappings` in `.vscode/launch.json` in order to not have to recreate the exact touchdesigner paths in Windows.
+-  🚀Figure out how to make the breakopoints set in the vscode UI work with this. I think the problem is related to the paths because when we move the whole project directly to the C drive and the paths are equal in Touchdesigner and in Windows, it works.
+
+[Link to discussion](https://forum.derivative.ca/t/python-debugger-profiler/298670/15) on Derivative's forum

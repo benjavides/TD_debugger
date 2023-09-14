@@ -11,17 +11,26 @@ class Person:
 		print(f"Script is running in: {os.getcwd()}")
 		print(f"__file__ attribute: {__file__}")
 		print("Jump!")
-		#debugpy.breakpoint()
+		#debugpy.breakpoint() #explicit breakpoint, use this if the ones in vscode don't trigger
 		self.Total_jumps.val = self.Total_jumps.eval() + 1
 		print(f"Total Jumps: {self.Total_jumps}")
-		
-	def Init_debugger(self):
-		print(f"Initializing debugger")
-		debugpy.listen(52492)
-		#print(f"Waiting for client...")
-		#debugpy.wait_for_client()
-		#print(f"Debugger connected!")
 
-	def Stop_debugger(self):
-		import pydevd
-		pydevd.stoptrace()
+	"""
+	Uncomment the following to run your own debugpy debugger
+	from touchdesigner. You can debug wihtout this because
+	when we attach a vscode debugger to a running process a
+	dll is injected which starts its own debugpy server and
+	vscode connect to that one.
+	Since we don't have the debugging workflow totally figured
+	out it may be useful to do some testing. 
+	"""
+	# def Init_debugger(self):
+	# 	print(f"Initializing debugger")
+	# 	debugpy.listen(52492)
+	# 	#print(f"Waiting for client...")
+	# 	#debugpy.wait_for_client()
+	# 	#print(f"Debugger connected!")
+
+	# def Stop_debugger(self):
+	# 	import pydevd
+	# 	pydevd.stoptrace()
